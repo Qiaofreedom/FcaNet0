@@ -10,7 +10,7 @@ def get_dct_weights( width, height, channel, fidx_u= [0,0,6,0,0,1,1,4,5,1,3,0,0,
     # width : width of input 
     # height : height of input 
     # channel : channel of input 
-    # fidx_u : horizontal indices of selected fequency 
+    # fidx_u : horizontal indices of selected fequency 低频高频差异不大
     # according to the paper, should be [0,0,6,0,0,1,1,4,5,1,3,0,0,0,2,3]
     # fidx_v : vertical indices of selected fequency 
     # according to the paper, should be [0,1,0,5,2,0,2,0,0,6,0,4,6,3,2,5]
@@ -39,7 +39,7 @@ class FcaLayer(nn.Module):
         super(FcaLayer, self).__init__()
         self.width = width
         self.height = height
-        self.register_buffer('pre_computed_dct_weights',get_dct_weights(self.width,self.height,channel))
+        self.register_buffer('pre_computed_dct_weights',get_dct_weights(self.width,self.height,channel)) 
         #self.register_parameter('pre_computed_dct_weights',torch.nn.Parameter(get_dct_weights(width,height,channel)))
         self.fc = nn.Sequential(
             nn.Linear(channel, channel // reduction, bias=False),
