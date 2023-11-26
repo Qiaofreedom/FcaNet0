@@ -1,3 +1,5 @@
+from torch import nn
+
 import torch,math 
 import torch.nn.functional as F
 def get_1d_dct(i, freq, L):
@@ -29,7 +31,6 @@ def get_dct_weights( width, height, channel, fidx_u= [0,0,6,0,0,1,1,4,5,1,3,0,0,
                 =get_1d_dct(t_x, u_x, width) * get_1d_dct(t_y, v_y, height) 
     # Eq. 7 in our paper 
     return dct_weights 
-from torch import nn
 
 
 class FcaLayer(nn.Module):
