@@ -1,7 +1,7 @@
 import torch,math 
 from torch import nn
 import torch.nn.functional as F
-def get_1d_dct(i, freq, L):
+def get_1d_dct(i, freq, L): # freq指的是频率
     result = math.cos(math.pi * freq * (i + 0.5) / L) / math.sqrt(L)
     if freq == 0: 
         return result 
