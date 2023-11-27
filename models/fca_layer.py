@@ -61,7 +61,7 @@ class FcaLayer(nn.Module):
     def forward(self, x):
         b, c, _, _ = x.size()
         y = F.adaptive_avg_pool2d(x,(self.height,self.width)) 
-        # 使用自适应平均池化，将输入张量 x 调整为指定的高度和宽度。
+        # 使用自适应平均池化，将输入张量 x 调整为指定的高度和宽度。一般情况下不需要用
         y = torch.sum(y*self.pre_computed_dct_weights,dim=(2,3))
         # 将调整后的张量与预先计算的 DCT 权重相乘，并在高度和宽度的维度上求和。这将产生一个形状为 (b, c) 的张量。
         y = self.fc(y).view(b, c, 1, 1)
