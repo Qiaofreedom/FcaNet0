@@ -52,10 +52,10 @@ class FcaLayer(nn.Module):
         #  使用 register_buffer 方法注册一个缓冲区，存储预先计算的离散余弦变换（DCT）权重。这些权重在模型的前向传播中被多次使用。
         #self.register_parameter('pre_computed_dct_weights',torch.nn.Parameter(get_dct_weights(width,height,channel)))
         self.fc = nn.Sequential( # 定义一个包含线性层和激活函数的序列。这个序列用于对 DCT 权重进行降维和增强。
-            nn.Linear(channel, channel // reduction, bias=False),
-            nn.ReLU(inplace=True),
-            nn.Linear(channel // reduction, channel, bias=False),
-            nn.Sigmoid()
+            nn.Linear(channel, channel // reduction, bias=False), # 将输入通道数降低到原来的 1/reduction。
+            nn.ReLU(inplace=True),  # ReLU 激活函数，增强模型的非线性能力。
+            nn.Linear(channel // reduction, channel, bias=False), # 将通道数恢复到原始大小。
+            nn.Sigmoid() # Sigmoid 激活函数，将输出映射到 [0, 1] 范围，用于生成注意力权重
         ) 
 
     def forward(self, x):
