@@ -60,10 +60,14 @@ class FcaLayer(nn.Module):
 
     def forward(self, x):
         b, c, _, _ = x.size()
-        y = F.adaptive_avg_pool2d(x,(self.height,self.width))
+        y = F.adaptive_avg_pool2d(x,(self.height,self.width)) 
+        # 使用自适应平均池化，将输入张量 x 调整为指定的高度和宽度。
         y = torch.sum(y*self.pre_computed_dct_weights,dim=(2,3))
+        # 将调整后的张量与预先计算的 DCT 权重相乘，并在高度和宽度的维度上求和。这将产生一个形状为 (b, c) 的张量。
         y = self.fc(y).view(b, c, 1, 1)
+        # 将 DCT 权重的加权和输入到前面定义的线性层序列中，然后将结果调整形状为 (b, c, 1, 1)
         return x * y.expand_as(x)
+        # 将输入张量 x 乘以计算得到的注意力权重，然后返回结果。这样，模型将输入的每个通道按照计算得到的频谱注意力进行加权。
 
 
     # def forward(self, x):
