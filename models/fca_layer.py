@@ -44,18 +44,19 @@ def get_dct_weights( width, height, channel, fidx_u= [0,0,6,0,0,1,1,4,5,1,3,0,0,
 class FcaLayer(nn.Module):
     def __init__(self,
                  channel,
-                 reduction,width,height):
+                 reduction,width,height): # reduction: 缩减率，用于降低通道数。
         super(FcaLayer, self).__init__()
         self.width = width
         self.height = height
         self.register_buffer('pre_computed_dct_weights',get_dct_weights(self.width,self.height,channel)) 
+        #  使用 register_buffer 方法注册一个缓冲区，存储预先计算的离散余弦变换（DCT）权重。这些权重在模型的前向传播中被多次使用。
         #self.register_parameter('pre_computed_dct_weights',torch.nn.Parameter(get_dct_weights(width,height,channel)))
-        self.fc = nn.Sequential(
+        self.fc = nn.Sequential( # 定义一个包含线性层和激活函数的序列。这个序列用于对 DCT 权重进行降维和增强。
             nn.Linear(channel, channel // reduction, bias=False),
             nn.ReLU(inplace=True),
             nn.Linear(channel // reduction, channel, bias=False),
             nn.Sigmoid()
-        )
+        ) 
 
     def forward(self, x):
         b, c, _, _ = x.size()
